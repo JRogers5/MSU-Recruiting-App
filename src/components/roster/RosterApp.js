@@ -2,7 +2,7 @@
 
 import { useMemo, useRef, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { POSITIONS, PAGE_LABELS } from './constants'
+import { POSITIONS, PAGE_LABELS, RECRUITING_POSITION_GROUPS } from './constants'
 import {
   insertPlayer,
   updatePlayer,
@@ -31,6 +31,7 @@ import Toast from './Toast'
 import EmptyState from './EmptyState'
 import PlaceholderPage from './PlaceholderPage'
 import ContactsPage from './ContactsPage'
+import RecruitingBoard from './RecruitingBoard'
 import AddContactChoiceModal from './AddContactChoiceModal'
 import ContactModal from './ContactModal'
 import ImportContactsModal from './ImportContactsModal'
@@ -429,6 +430,11 @@ export default function RosterApp({
               Roster data is shared with all signed-in staff. Only admins can make changes.
             </p>
           </>
+        ) : page === 'rec2027' ? (
+          <RecruitingBoard
+            title="2027 Recruiting Board"
+            positions={RECRUITING_POSITION_GROUPS}
+          />
         ) : page === 'contacts' ? (
           <ContactsPage
             contacts={contacts}

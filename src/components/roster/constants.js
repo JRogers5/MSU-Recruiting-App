@@ -69,6 +69,15 @@ export const RECRUITING_SERVICES = [
   },
 ]
 
+export const RECRUITING_POSITION_GROUPS = [
+  'Point Guard',
+  'Combo Guard',
+  'Shooting Guard',
+  'Wing',
+  'Forward',
+  'Center',
+]
+
 export const PAGE_LABELS = {
   rec2027: '2027 Recruiting',
   rec2028: '2028 Recruiting',
