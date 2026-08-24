@@ -131,3 +131,16 @@ export async function uploadProspectPhoto(supabase, prospectId, blob) {
   } = supabase.storage.from('prospect-photos').getPublicUrl(path)
   return `${publicUrl}?v=${Date.now()}`
 }
+
+export async function uploadProspectShotChart(supabase, prospectId, file) {
+  const ext = file.name.split('.').pop() || 'jpg'
+  const path = `${prospectId}-shotchart.${ext}`
+  const { error } = await supabase.storage
+    .from('prospect-photos')
+    .upload(path, file, { upsert: true })
+  if (error) throw error
+  const {
+    data: { publicUrl },
+  } = supabase.storage.from('prospect-photos').getPublicUrl(path)
+  return `${publicUrl}?v=${Date.now()}`
+}

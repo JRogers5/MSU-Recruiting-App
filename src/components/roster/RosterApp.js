@@ -21,6 +21,7 @@ import {
   deleteProspectRow,
   reorderProspectColumn,
   uploadProspectPhoto,
+  uploadProspectShotChart,
 } from './api'
 import NavMenu from './NavMenu'
 import Header from './Header'
@@ -388,7 +389,7 @@ export default function RosterApp({
     setProspectBoard(null)
   }
 
-  async function saveProspect({ id, isNew, values, photoResult }) {
+  async function saveProspect({ id, isNew, values, photoResult, shotChartResult }) {
     try {
       const prospectId = id || crypto.randomUUID()
       let photo_url
@@ -396,6 +397,13 @@ export default function RosterApp({
         photo_url = await uploadProspectPhoto(supabase, prospectId, photoResult.blob)
       } else if (photoResult?.removed) {
         photo_url = null
+      }
+
+      let shot_chart_url
+      if (shotChartResult?.file) {
+        shot_chart_url = await uploadProspectShotChart(supabase, prospectId, shotChartResult.file)
+      } else if (shotChartResult?.removed) {
+        shot_chart_url = null
       }
 
       if (isNew) {
@@ -408,12 +416,14 @@ export default function RosterApp({
           ...values,
           sort_order: order,
           photo_url: photo_url ?? null,
+          shot_chart_url: shot_chart_url ?? null,
         })
         setProspects((prev) => [...prev, inserted])
         showToast('Prospect added')
       } else {
         const patch = { ...values }
         if (photo_url !== undefined) patch.photo_url = photo_url
+        if (shot_chart_url !== undefined) patch.shot_chart_url = shot_chart_url
         const updated = await updateProspect(supabase, id, patch)
         setProspects((prev) => prev.map((p) => (p.id === id ? updated : p)))
         showToast('Prospect updated')

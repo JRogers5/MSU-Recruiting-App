@@ -39,7 +39,16 @@ export default function ProspectDetailModal({ prospect, isAdmin, onEdit, onClose
           <div style={{ width: '78px', height: '78px' }}>
             <Avatar player={{ name: prospect.name, photo_url: prospect.photo_url }} className="card-photo" />
           </div>
-          <h2 style={{ margin: 0 }}>{prospect.name}</h2>
+          <h2 style={{ margin: 0, flex: 1 }}>{prospect.name}</h2>
+          <a
+            className="btn"
+            href={`/prospects/${prospect.id}/sheet`}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ background: 'var(--risk-high)', borderColor: 'var(--risk-high)', color: '#fff' }}
+          >
+            Profile Sheet
+          </a>
         </div>
 
         <Row label="Committed" value={prospect.committed ? 'Yes' : 'No'} />

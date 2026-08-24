@@ -3,11 +3,21 @@
 import { useRef, useState } from 'react'
 import { RECRUITING_POSITION_GROUPS } from './constants'
 import PhotoUpload from './PhotoUpload'
+import ShotChartUpload from './ShotChartUpload'
+
+function SectionLabel({ children }) {
+  return (
+    <div className="field full" style={{ marginTop: '6px' }}>
+      <label style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 600 }}>{children}</label>
+    </div>
+  )
+}
 
 export default function ProspectModal({ prospect, presetPositionGroup, onSave, onClose, onToast }) {
   const isNew = !prospect
   const [saving, setSaving] = useState(false)
   const photoRef = useRef(null)
+  const shotChartRef = useRef(null)
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -17,21 +27,45 @@ export default function ProspectModal({ prospect, presetPositionGroup, onSave, o
       onToast('Name is required')
       return
     }
+    const text = (key) => fd.get(key)?.trim() || ''
     const values = {
       name,
       position_group: fd.get('position_group'),
-      high_school: fd.get('high_school')?.trim() || '',
-      aau_team: fd.get('aau_team')?.trim() || '',
-      hometown: fd.get('hometown')?.trim() || '',
-      height: fd.get('height') || '',
+      high_school: text('high_school'),
+      aau_team: text('aau_team'),
+      hometown: text('hometown'),
+      height: text('height'),
       weight: fd.get('weight') ? Number(fd.get('weight')) : null,
-      synergy_link: fd.get('synergy_link')?.trim() || '',
-      highlight_link: fd.get('highlight_link')?.trim() || '',
+      synergy_link: text('synergy_link'),
+      highlight_link: text('highlight_link'),
       committed: fd.get('committed') === 'on',
+      wingspan: text('wingspan'),
+      standing_reach: text('standing_reach'),
+      dominant_hand: fd.get('dominant_hand') || '',
+      player_cell: text('player_cell'),
+      twitter_handle: text('twitter_handle'),
+      instagram_handle: text('instagram_handle'),
+      hs_coach: text('hs_coach'),
+      aau_coach: text('aau_coach'),
+      agent: text('agent'),
+      offers: text('offers'),
+      ov_date: text('ov_date'),
+      main_competition: text('main_competition'),
+      main_recruiter: text('main_recruiter'),
+      sec_comp: text('sec_comp'),
+      game_breakdown: text('game_breakdown'),
+      ppg: text('ppg'),
+      rpg: text('rpg'),
+      apg: text('apg'),
+      bpg: text('bpg'),
+      fg_pct: text('fg_pct'),
+      ft_pct: text('ft_pct'),
+      three_pt_pct: text('three_pt_pct'),
     }
     setSaving(true)
     const photoResult = await photoRef.current.getResult()
-    await onSave({ id: prospect?.id, isNew, values, photoResult })
+    const shotChartResult = await shotChartRef.current.getResult()
+    await onSave({ id: prospect?.id, isNew, values, photoResult, shotChartResult })
     setSaving(false)
   }
 
@@ -42,7 +76,7 @@ export default function ProspectModal({ prospect, presetPositionGroup, onSave, o
         if (e.target === e.currentTarget) onClose()
       }}
     >
-      <div className="modal">
+      <div className="modal" style={{ maxWidth: '640px' }}>
         <h2>{isNew ? 'Add prospect' : 'Edit prospect'}</h2>
         <form onSubmit={handleSubmit}>
           <PhotoUpload ref={photoRef} initialPhotoUrl={prospect?.photo_url} />
@@ -77,24 +111,145 @@ export default function ProspectModal({ prospect, presetPositionGroup, onSave, o
               <input name="aau_team" defaultValue={prospect?.aau_team || ''} />
             </div>
 
+            <div className="field full">
+              <label>Hometown (City, State)</label>
+              <input name="hometown" defaultValue={prospect?.hometown || ''} />
+            </div>
+
+            <SectionLabel>Measurements</SectionLabel>
+
             <div className="field">
               <label>Height</label>
               <input name="height" placeholder="6'5&quot;" defaultValue={prospect?.height || ''} />
             </div>
-
             <div className="field">
               <label>Weight (lb)</label>
               <input type="number" name="weight" defaultValue={prospect?.weight ?? ''} />
             </div>
-
-            <div className="field full">
-              <label>Hometown</label>
-              <input name="hometown" defaultValue={prospect?.hometown || ''} />
+            <div className="field">
+              <label>Wingspan</label>
+              <input name="wingspan" placeholder="6'9&quot;" defaultValue={prospect?.wingspan || ''} />
+            </div>
+            <div className="field">
+              <label>Standing reach</label>
+              <input
+                name="standing_reach"
+                placeholder="8'5&quot;"
+                defaultValue={prospect?.standing_reach || ''}
+              />
+            </div>
+            <div className="field">
+              <label>Dominant hand</label>
+              <select name="dominant_hand" defaultValue={prospect?.dominant_hand || ''}>
+                <option value="">—</option>
+                <option value="Right">Right</option>
+                <option value="Left">Left</option>
+                <option value="Ambidextrous">Ambidextrous</option>
+              </select>
             </div>
 
+            <SectionLabel>Shot chart</SectionLabel>
             <div className="field full">
-              <label>Film links</label>
+              <ShotChartUpload ref={shotChartRef} initialUrl={prospect?.shot_chart_url} />
             </div>
+
+            <SectionLabel>Evaluation</SectionLabel>
+
+            <div className="field">
+              <label>Main recruiter</label>
+              <input name="main_recruiter" defaultValue={prospect?.main_recruiter || ''} />
+            </div>
+            <div className="field">
+              <label>SEC comp</label>
+              <input name="sec_comp" defaultValue={prospect?.sec_comp || ''} />
+            </div>
+            <div className="field full">
+              <label>Current game breakdown</label>
+              <textarea
+                name="game_breakdown"
+                style={{ minHeight: '100px' }}
+                defaultValue={prospect?.game_breakdown || ''}
+              />
+            </div>
+
+            <SectionLabel>Recruiting information</SectionLabel>
+
+            <div className="field">
+              <label>High school coach</label>
+              <input name="hs_coach" defaultValue={prospect?.hs_coach || ''} />
+            </div>
+            <div className="field">
+              <label>AAU coach</label>
+              <input name="aau_coach" defaultValue={prospect?.aau_coach || ''} />
+            </div>
+            <div className="field">
+              <label>Agent / Representative</label>
+              <input name="agent" defaultValue={prospect?.agent || ''} />
+            </div>
+            <div className="field">
+              <label>Main competition</label>
+              <input name="main_competition" defaultValue={prospect?.main_competition || ''} />
+            </div>
+            <div className="field full">
+              <label>Offers</label>
+              <input
+                name="offers"
+                placeholder="Comma-separated list of schools"
+                defaultValue={prospect?.offers || ''}
+              />
+            </div>
+            <div className="field">
+              <label>OV date</label>
+              <input type="date" name="ov_date" defaultValue={prospect?.ov_date || ''} />
+            </div>
+
+            <SectionLabel>2026 AAU statline</SectionLabel>
+
+            <div className="field">
+              <label>PPG</label>
+              <input name="ppg" defaultValue={prospect?.ppg || ''} />
+            </div>
+            <div className="field">
+              <label>RPG</label>
+              <input name="rpg" defaultValue={prospect?.rpg || ''} />
+            </div>
+            <div className="field">
+              <label>APG</label>
+              <input name="apg" defaultValue={prospect?.apg || ''} />
+            </div>
+            <div className="field">
+              <label>BPG</label>
+              <input name="bpg" defaultValue={prospect?.bpg || ''} />
+            </div>
+            <div className="field">
+              <label>FG %</label>
+              <input name="fg_pct" defaultValue={prospect?.fg_pct || ''} />
+            </div>
+            <div className="field">
+              <label>FT %</label>
+              <input name="ft_pct" defaultValue={prospect?.ft_pct || ''} />
+            </div>
+            <div className="field">
+              <label>3PT %</label>
+              <input name="three_pt_pct" defaultValue={prospect?.three_pt_pct || ''} />
+            </div>
+
+            <SectionLabel>Contact information</SectionLabel>
+
+            <div className="field">
+              <label>Player cell</label>
+              <input type="tel" name="player_cell" defaultValue={prospect?.player_cell || ''} />
+            </div>
+            <div className="field">
+              <label>X (Twitter)</label>
+              <input name="twitter_handle" defaultValue={prospect?.twitter_handle || ''} />
+            </div>
+            <div className="field">
+              <label>Instagram</label>
+              <input name="instagram_handle" defaultValue={prospect?.instagram_handle || ''} />
+            </div>
+
+            <SectionLabel>Film links</SectionLabel>
 
             <div className="field">
               <label>Synergy link</label>
