@@ -139,31 +139,25 @@ export default function ProspectSheet({ prospect }) {
         </div>
       </div>
 
-      <div className="sheet-block-head">2026 AAU Statline</div>
-      <table className="sheet-stat-table">
-        <thead>
-          <tr>
-            <th>PPG</th>
-            <th>RPG</th>
-            <th>APG</th>
-            <th>BPG</th>
-            <th>FG %</th>
-            <th>FT %</th>
-            <th>3PT %</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{prospect.ppg || ''}</td>
-            <td>{prospect.rpg || ''}</td>
-            <td>{prospect.apg || ''}</td>
-            <td>{prospect.bpg || ''}</td>
-            <td>{prospect.fg_pct || ''}</td>
-            <td>{prospect.ft_pct || ''}</td>
-            <td>{prospect.three_pt_pct || ''}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div className="sheet-block" style={{ marginTop: '20px' }}>
+        <div className="sheet-block-head">2026 AAU Statline</div>
+        <div className="sheet-stat-row">
+          {[
+            ['PPG', prospect.ppg],
+            ['RPG', prospect.rpg],
+            ['APG', prospect.apg],
+            ['BPG', prospect.bpg],
+            ['FG %', prospect.fg_pct],
+            ['FT %', prospect.ft_pct],
+            ['3PT %', prospect.three_pt_pct],
+          ].map(([label, value]) => (
+            <div className="sheet-stat-cell" key={label}>
+              <div className="stat-label">{label}</div>
+              <div className="stat-value">{value || ''}</div>
+            </div>
+          ))}
+        </div>
+      </div>
 
       <div className="sheet-footer">
         {/* eslint-disable-next-line @next/next/no-img-element */}
