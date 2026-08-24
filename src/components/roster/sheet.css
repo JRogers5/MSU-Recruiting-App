@@ -66,6 +66,7 @@
 
 @media print{
   .sheet-toolbar{display:none;}
-  .sheet-page{max-width:none;padding:0;}
+  .sheet-page{max-width:none;padding:0;min-height:9.8in;display:flex;flex-direction:column;}
+  .sheet-footer{margin-top:auto;}
   @page{size:letter;margin:0.4in;}
 }
