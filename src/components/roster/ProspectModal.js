@@ -27,6 +27,7 @@ export default function ProspectModal({ prospect, presetPositionGroup, onSave, o
       weight: fd.get('weight') ? Number(fd.get('weight')) : null,
       synergy_link: fd.get('synergy_link')?.trim() || '',
       highlight_link: fd.get('highlight_link')?.trim() || '',
+      committed: fd.get('committed') === 'on',
     }
     setSaving(true)
     const photoResult = await photoRef.current.getResult()
@@ -113,6 +114,16 @@ export default function ProspectModal({ prospect, presetPositionGroup, onSave, o
                 placeholder="https://…"
                 defaultValue={prospect?.highlight_link || ''}
               />
+            </div>
+
+            <div className="field full checkbox-field">
+              <input
+                type="checkbox"
+                id="committed-check"
+                name="committed"
+                defaultChecked={prospect?.committed || false}
+              />
+              <label htmlFor="committed-check">Committed</label>
             </div>
           </div>
 

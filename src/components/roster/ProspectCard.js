@@ -16,7 +16,7 @@ export default function ProspectCard({
 }) {
   return (
     <div
-      className={`player-card${isDragging ? ' dragging' : ''}`}
+      className={`player-card${prospect.committed ? ' committed' : ''}${isDragging ? ' dragging' : ''}`}
       draggable={isAdmin}
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
@@ -66,6 +66,7 @@ export default function ProspectCard({
             )}
             {prospect.high_school && <span className="chip">{prospect.high_school}</span>}
             {prospect.aau_team && <span className="chip">{prospect.aau_team}</span>}
+            {prospect.committed && <span className="chip committed-chip">Committed</span>}
           </div>
         </div>
       </div>

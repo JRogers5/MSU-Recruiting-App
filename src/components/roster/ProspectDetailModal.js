@@ -42,6 +42,7 @@ export default function ProspectDetailModal({ prospect, isAdmin, onEdit, onClose
           <h2 style={{ margin: 0 }}>{prospect.name}</h2>
         </div>
 
+        <Row label="Committed" value={prospect.committed ? 'Yes' : 'No'} />
         <Row label="Position group" value={prospect.position_group} />
         <Row label="High school" value={prospect.high_school} />
         <Row label="AAU team" value={prospect.aau_team} />
