@@ -1,7 +1,34 @@
 'use client'
 
+import { useState } from 'react'
+
+const COLUMNS = [
+  { key: 'name', label: 'Name' },
+  { key: 'category', label: 'Category' },
+  { key: 'organization', label: 'Organization' },
+  { key: 'phone', label: 'Phone' },
+]
+
 export default function ContactsPage({ contacts, isAdmin, onAdd, onEdit, onDelete }) {
-  const sorted = [...contacts].sort((a, b) => a.name.localeCompare(b.name))
+  const [sortKey, setSortKey] = useState('name')
+  const [sortDir, setSortDir] = useState('asc')
+
+  function toggleSort(key) {
+    if (sortKey === key) {
+      setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'))
+    } else {
+      setSortKey(key)
+      setSortDir('asc')
+    }
+  }
+
+  const sorted = [...contacts].sort((a, b) => {
+    const av = (a[sortKey] || '').toLowerCase()
+    const bv = (b[sortKey] || '').toLowerCase()
+    if (av < bv) return sortDir === 'asc' ? -1 : 1
+    if (av > bv) return sortDir === 'asc' ? 1 : -1
+    return 0
+  })
 
   return (
     <div>
@@ -31,10 +58,12 @@ export default function ContactsPage({ contacts, isAdmin, onAdd, onEdit, onDelet
           <table>
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Organization</th>
-                <th>Phone</th>
+                {COLUMNS.map((col) => (
+                  <th key={col.key} onClick={() => toggleSort(col.key)}>
+                    {col.label}
+                    {sortKey === col.key ? (sortDir === 'asc' ? ' ▲' : ' ▼') : ''}
+                  </th>
+                ))}
                 {isAdmin && <th></th>}
               </tr>
             </thead>
