@@ -10,7 +10,7 @@ export default async function LoginPage({ searchParams }) {
         className="w-full max-w-sm rounded-lg border border-zinc-200 bg-white p-8 shadow-sm dark:border-zinc-800 dark:bg-zinc-950"
       >
         <h1 className="mb-1 text-xl font-semibold text-zinc-900 dark:text-zinc-50">
-          MSU Roster
+          The Dawg Vault
         </h1>
         <p className="mb-6 text-sm text-zinc-500">
           Sign in with your staff account

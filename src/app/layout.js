@@ -12,7 +12,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "MSU Roster",
+  title: "The Dawg Vault",
   description: "Staff roster dashboard",
 };
 

@@ -22,7 +22,7 @@ export default async function DashboardPage() {
       <header className="flex items-center justify-between border-b border-zinc-200 px-6 py-4 dark:border-zinc-800">
         <div>
           <h1 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
-            MSU Roster
+            The Dawg Vault
           </h1>
           {staffRow ? (
             <p className="text-sm text-zinc-500">
