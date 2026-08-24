@@ -268,3 +268,15 @@
   .header{padding:28px 18px;}
   .team-name-input{font-size:30px;}
 }
+
+/* Profile sheet modal */
+.sheet-modal-backdrop{position:fixed;inset:0;background:rgba(8,10,14,0.7);z-index:70;overflow-y:auto;padding:24px 16px;}
+.sheet-modal{max-width:900px;margin:0 auto;background:#fff;border-radius:10px;overflow:hidden;}
+.sheet-modal-toolbar{position:sticky;top:0;z-index:1;}
+
+@media print{
+  body *{visibility:hidden;}
+  .prospect-sheet-print, .prospect-sheet-print *{visibility:visible;}
+  .prospect-sheet-print{position:absolute;left:0;top:0;width:100%;margin:0;}
+  .sheet-modal-toolbar{display:none;}
+}

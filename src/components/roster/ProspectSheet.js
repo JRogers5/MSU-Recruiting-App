@@ -1,8 +1,7 @@
-import { redirect, notFound } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
-import { initials } from '@/components/roster/utils'
-import { STATE_SCRIPT_LOGO, BULLDOG_MASCOT_LOGO } from '@/components/roster/sheetLogos'
-import PrintTrigger from './PrintTrigger'
+'use client'
+
+import { initials } from './utils'
+import { STATE_SCRIPT_LOGO, BULLDOG_MASCOT_LOGO } from './sheetLogos'
 import './sheet.css'
 
 function classLabel(board) {
@@ -12,29 +11,9 @@ function classLabel(board) {
   return ''
 }
 
-export default async function ProspectSheetPage({ params }) {
-  const { id } = await params
-  const supabase = await createClient()
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
-
-  const { data: staffRow } = await supabase
-    .from('staff')
-    .select('role')
-    .eq('id', user.id)
-    .single()
-  if (!staffRow) redirect('/')
-
-  const { data: prospect } = await supabase.from('prospects').select('*').eq('id', id).single()
-  if (!prospect) notFound()
-
+export default function ProspectSheet({ prospect }) {
   return (
-    <div className="sheet-page">
-      <PrintTrigger />
-
+    <div className="sheet-page prospect-sheet-print">
       <div className="sheet-header">
         <div className="sheet-photo">
           {prospect.photo_url ? (

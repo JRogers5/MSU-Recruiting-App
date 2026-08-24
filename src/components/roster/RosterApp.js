@@ -44,6 +44,7 @@ import ImportContactsModal from './ImportContactsModal'
 import ProspectModal from './ProspectModal'
 import PlayerDetailModal from './PlayerDetailModal'
 import ProspectDetailModal from './ProspectDetailModal'
+import ProspectSheetModal from './ProspectSheetModal'
 
 const RECRUITING_BOARD_KEYS = Object.keys(RECRUITING_BOARDS)
 
@@ -90,6 +91,7 @@ export default function RosterApp({
   const [presetPosition, setPresetPosition] = useState(null)
   const [viewingPlayerId, setViewingPlayerId] = useState(null)
   const [viewingProspectId, setViewingProspectId] = useState(null)
+  const [sheetProspectId, setSheetProspectId] = useState(null)
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [saveFailed, setSaveFailed] = useState(false)
   const [toastMsg, setToastMsg] = useState('')
@@ -493,6 +495,9 @@ export default function RosterApp({
   const viewingProspect = viewingProspectId
     ? prospects.find((p) => p.id === viewingProspectId)
     : null
+  const sheetProspect = sheetProspectId
+    ? prospects.find((p) => p.id === sheetProspectId)
+    : null
 
   return (
     <div className="roster-root">
@@ -643,8 +648,16 @@ export default function RosterApp({
             setViewingProspectId(null)
             openProspectModal(viewingProspect.board, id, null)
           }}
+          onOpenSheet={(prospect) => {
+            setViewingProspectId(null)
+            setSheetProspectId(prospect.id)
+          }}
           onClose={() => setViewingProspectId(null)}
         />
+      )}
+
+      {sheetProspect && (
+        <ProspectSheetModal prospect={sheetProspect} onClose={() => setSheetProspectId(null)} />
       )}
 
       {addChoiceOpen && (

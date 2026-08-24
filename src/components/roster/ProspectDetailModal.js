@@ -26,7 +26,7 @@ function LinkRow({ label, url }) {
   )
 }
 
-export default function ProspectDetailModal({ prospect, isAdmin, onEdit, onClose }) {
+export default function ProspectDetailModal({ prospect, isAdmin, onEdit, onOpenSheet, onClose }) {
   return (
     <div
       className="modal-backdrop"
@@ -40,15 +40,13 @@ export default function ProspectDetailModal({ prospect, isAdmin, onEdit, onClose
             <Avatar player={{ name: prospect.name, photo_url: prospect.photo_url }} className="card-photo" />
           </div>
           <h2 style={{ margin: 0, flex: 1 }}>{prospect.name}</h2>
-          <a
+          <button
             className="btn"
-            href={`/prospects/${prospect.id}/sheet`}
-            target="_blank"
-            rel="noopener noreferrer"
+            onClick={() => onOpenSheet(prospect)}
             style={{ background: 'var(--risk-high)', borderColor: 'var(--risk-high)', color: '#fff' }}
           >
             Profile Sheet
-          </a>
+          </button>
         </div>
 
         <Row label="Committed" value={prospect.committed ? 'Yes' : 'No'} />
