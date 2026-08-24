@@ -1,5 +1,6 @@
 import { DRAFTEXPRESS_LOGO } from './draftExpressLogo'
 import { MAROON_WHITE_DAILY_LOGO } from './maroonWhiteLogo'
+import { GENES_PAGE_LOGO } from './genesPageLogo'
 
 export const POSITIONS = ['PG', 'SG', 'SF', 'PF', 'C']
 
@@ -52,6 +53,12 @@ export const RECRUITING_SERVICES = [
     sub: 'On3 Team Site',
     url: 'https://www.on3.com/teams/mississippi-state-bulldogs/',
     logo: MAROON_WHITE_DAILY_LOGO,
+  },
+  {
+    name: "Gene's Page",
+    sub: '247Sports Team Site',
+    url: 'https://247sports.com/college/mississippi-state/',
+    logo: GENES_PAGE_LOGO,
   },
 ]
 
