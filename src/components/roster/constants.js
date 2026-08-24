@@ -1,4 +1,5 @@
 import { DRAFTEXPRESS_LOGO } from './draftExpressLogo'
+import { MAROON_WHITE_DAILY_LOGO } from './maroonWhiteLogo'
 
 export const POSITIONS = ['PG', 'SG', 'SF', 'PF', 'C']
 
@@ -45,6 +46,12 @@ export const RECRUITING_SERVICES = [
     sub: 'Scouting & Draft Analysis',
     url: 'https://www.draftexpress.com/gold/index.php',
     logo: DRAFTEXPRESS_LOGO,
+  },
+  {
+    name: 'Maroon and White Daily',
+    sub: 'On3 Team Site',
+    url: 'https://www.on3.com/teams/mississippi-state-bulldogs/',
+    logo: MAROON_WHITE_DAILY_LOGO,
   },
 ]
 
