@@ -25,8 +25,9 @@
 .sheet-line .sep{color:var(--border);font-weight:400;}
 .sheet-line.sub{color:#3a2f2f;font-size:13px;}
 
-.sheet-body{display:table;table-layout:fixed;width:100%;border-spacing:18px 0;}
-.sheet-col{display:table-cell;vertical-align:top;width:50%;}
+.sheet-body{display:flex;gap:18px;align-items:flex-start;}
+.sheet-col{flex:1;min-width:0;}
+.sheet-col:last-child{flex:1.4;}
 .sheet-block{margin-bottom:16px;}
 .sheet-block-head{
   background:var(--maroon);color:#fff;font-family:'Oswald',sans-serif;font-weight:600;text-transform:uppercase;
