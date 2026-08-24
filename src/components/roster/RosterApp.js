@@ -336,8 +336,8 @@ export default function RosterApp({ initialPlayers, initialSettings, role, staff
               <Forecast players={players} />
             )}
 
-            <QuickLinks />
             <RecruitingServices />
+            <QuickLinks />
             <p className="footer-note">
               Roster data is shared with all signed-in staff. Only admins can make changes.
             </p>
