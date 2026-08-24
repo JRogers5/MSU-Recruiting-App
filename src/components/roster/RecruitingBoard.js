@@ -3,9 +3,19 @@
 export default function RecruitingBoard({ title, positions }) {
   return (
     <div>
-      <div className="toolbar">
-        <span className="section-title">{title}</span>
-      </div>
+      <h2
+        className="display"
+        style={{
+          textAlign: 'center',
+          fontSize: '32px',
+          fontWeight: 700,
+          letterSpacing: '.03em',
+          color: 'var(--text)',
+          margin: '4px 0 22px',
+        }}
+      >
+        {title}
+      </h2>
       <div className="board">
         {positions.map((pos) => (
           <div className="board-col" key={pos}>
