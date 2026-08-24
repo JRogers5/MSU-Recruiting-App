@@ -30,7 +30,7 @@ export default function NavMenu({ page, setPage, staffName, role, logoutAction }
               setOpen(false)
             }}
           >
-            Admin
+            Dashboard
           </button>
           <div className="menu-divider" />
           {Object.entries(PAGE_LABELS).map(([key, label]) => (
