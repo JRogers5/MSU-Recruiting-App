@@ -12,6 +12,10 @@ import {
   reorderColumn,
   updateSettingsRow,
   uploadPlayerPhoto,
+  insertContact,
+  updateContact,
+  deleteContactRow,
+  bulkInsertContacts,
 } from './api'
 import NavMenu from './NavMenu'
 import Header from './Header'
@@ -26,6 +30,10 @@ import RecruitingServices from './RecruitingServices'
 import Toast from './Toast'
 import EmptyState from './EmptyState'
 import PlaceholderPage from './PlaceholderPage'
+import ContactsPage from './ContactsPage'
+import AddContactChoiceModal from './AddContactChoiceModal'
+import ContactModal from './ContactModal'
+import ImportContactsModal from './ImportContactsModal'
 
 const SAMPLE_PLAYERS = [
   { position: 'PG', name: 'Jalen Carter', class: 'Jr', elig_remaining: 2, height: '6\'1"', weight: 180, hometown: 'Jackson, MS', prior_school: '', exempt: false },
@@ -36,12 +44,24 @@ const SAMPLE_PLAYERS = [
   { position: 'SG', name: 'Trey Williams', class: 'Fr', elig_remaining: 4, height: '6\'3"', weight: 185, hometown: 'Starkville, MS', prior_school: '', exempt: false },
 ]
 
-export default function RosterApp({ initialPlayers, initialSettings, role, staffName, logoutAction }) {
+export default function RosterApp({
+  initialPlayers,
+  initialSettings,
+  initialContacts,
+  role,
+  staffName,
+  logoutAction,
+}) {
   const supabase = useMemo(() => createClient(), [])
   const isAdmin = role === 'admin'
 
   const [players, setPlayers] = useState(initialPlayers)
   const [settings, setSettings] = useState(initialSettings)
+  const [contacts, setContacts] = useState(initialContacts)
+  const [addChoiceOpen, setAddChoiceOpen] = useState(false)
+  const [contactModalOpen, setContactModalOpen] = useState(false)
+  const [editingContactId, setEditingContactId] = useState(null)
+  const [importOpen, setImportOpen] = useState(false)
   const [page, setPage] = useState('admin')
   const [view, setView] = useState('board')
   const [filters, setFilters] = useState({ q: '', pos: 'all', cls: 'all' })
@@ -271,7 +291,74 @@ export default function RosterApp({ initialPlayers, initialSettings, role, staff
     }
   }
 
+  function openManualAdd() {
+    setEditingContactId(null)
+    setAddChoiceOpen(false)
+    setContactModalOpen(true)
+  }
+
+  function openEditContact(contact) {
+    setEditingContactId(contact.id)
+    setContactModalOpen(true)
+  }
+
+  function closeContactModal() {
+    setContactModalOpen(false)
+    setEditingContactId(null)
+  }
+
+  async function saveContact({ id, isNew, values }) {
+    try {
+      if (isNew) {
+        const inserted = await insertContact(supabase, values)
+        setContacts((prev) => [...prev, inserted])
+        showToast('Contact added')
+      } else {
+        const updated = await updateContact(supabase, id, values)
+        setContacts((prev) => prev.map((c) => (c.id === id ? updated : c)))
+        showToast('Contact updated')
+      }
+      setSaveFailed(false)
+      closeContactModal()
+    } catch (err) {
+      console.error(err)
+      setSaveFailed(true)
+      showToast('Could not save contact')
+    }
+  }
+
+  async function deleteContact(contact) {
+    if (!confirm(`Remove ${contact.name} from contacts?`)) return
+    try {
+      await deleteContactRow(supabase, contact.id)
+      setContacts((prev) => prev.filter((c) => c.id !== contact.id))
+      showToast('Contact removed')
+      setSaveFailed(false)
+    } catch (err) {
+      console.error(err)
+      setSaveFailed(true)
+      showToast('Could not remove contact')
+    }
+  }
+
+  async function importContacts(rows) {
+    try {
+      const inserted = await bulkInsertContacts(supabase, rows)
+      setContacts((prev) => [...prev, ...inserted])
+      showToast(`Imported ${inserted.length} contact${inserted.length === 1 ? '' : 's'}`)
+      setImportOpen(false)
+      setSaveFailed(false)
+    } catch (err) {
+      console.error(err)
+      setSaveFailed(true)
+      showToast('Could not import contacts')
+    }
+  }
+
   const editingPlayer = editingId ? players.find((p) => p.id === editingId) : null
+  const editingContact = editingContactId
+    ? contacts.find((c) => c.id === editingContactId)
+    : null
 
   return (
     <div className="roster-root">
@@ -342,6 +429,14 @@ export default function RosterApp({ initialPlayers, initialSettings, role, staff
               Roster data is shared with all signed-in staff. Only admins can make changes.
             </p>
           </>
+        ) : page === 'contacts' ? (
+          <ContactsPage
+            contacts={contacts}
+            isAdmin={isAdmin}
+            onAdd={() => setAddChoiceOpen(true)}
+            onEdit={openEditContact}
+            onDelete={deleteContact}
+          />
         ) : (
           <PlaceholderPage label={PAGE_LABELS[page]} />
         )}
@@ -366,6 +461,34 @@ export default function RosterApp({ initialPlayers, initialSettings, role, staff
           onExport={exportRoster}
           onImport={importRosterFile}
           onClear={clearRoster}
+        />
+      )}
+
+      {addChoiceOpen && (
+        <AddContactChoiceModal
+          onManual={openManualAdd}
+          onImport={() => {
+            setAddChoiceOpen(false)
+            setImportOpen(true)
+          }}
+          onClose={() => setAddChoiceOpen(false)}
+        />
+      )}
+
+      {contactModalOpen && (
+        <ContactModal
+          contact={editingContact}
+          onSave={saveContact}
+          onClose={closeContactModal}
+          onToast={showToast}
+        />
+      )}
+
+      {importOpen && (
+        <ImportContactsModal
+          onImport={importContacts}
+          onClose={() => setImportOpen(false)}
+          onToast={showToast}
         />
       )}
 

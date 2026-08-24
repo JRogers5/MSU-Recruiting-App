@@ -50,6 +50,34 @@ export async function updateSettingsRow(supabase, patch) {
   return data
 }
 
+export async function insertContact(supabase, contact) {
+  const { data, error } = await supabase.from('contacts').insert(contact).select().single()
+  if (error) throw error
+  return data
+}
+
+export async function updateContact(supabase, id, patch) {
+  const { data, error } = await supabase
+    .from('contacts')
+    .update(patch)
+    .eq('id', id)
+    .select()
+    .single()
+  if (error) throw error
+  return data
+}
+
+export async function deleteContactRow(supabase, id) {
+  const { error } = await supabase.from('contacts').delete().eq('id', id)
+  if (error) throw error
+}
+
+export async function bulkInsertContacts(supabase, contacts) {
+  const { data, error } = await supabase.from('contacts').insert(contacts).select()
+  if (error) throw error
+  return data
+}
+
 export async function uploadPlayerPhoto(supabase, playerId, blob) {
   const path = `${playerId}.jpg`
   const { error } = await supabase.storage

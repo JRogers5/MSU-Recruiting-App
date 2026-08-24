@@ -45,13 +45,14 @@ export default async function DashboardPage() {
     )
   }
 
-  const [{ data: players }, { data: settings }] = await Promise.all([
+  const [{ data: players }, { data: settings }, { data: contacts }] = await Promise.all([
     supabase
       .from('players')
       .select('*')
       .order('position')
       .order('sort_order'),
     supabase.from('settings').select('*').eq('id', true).single(),
+    supabase.from('contacts').select('*'),
   ])
 
   return (
@@ -60,6 +61,7 @@ export default async function DashboardPage() {
       initialSettings={
         settings || { team_name: 'Mississippi State Basketball', roster_limit: 15 }
       }
+      initialContacts={contacts || []}
       role={staffRow.role}
       staffName={staffRow.name}
       logoutAction={logout}
