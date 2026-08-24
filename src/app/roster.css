@@ -275,8 +275,8 @@
 .sheet-modal-toolbar{position:sticky;top:0;z-index:1;}
 
 @media print{
-  body *{visibility:hidden;}
-  .prospect-sheet-print, .prospect-sheet-print *{visibility:visible;}
-  .prospect-sheet-print{position:absolute;left:0;top:0;width:100%;margin:0;}
-  .sheet-modal-toolbar{display:none;}
+  .roster-root > *:not(.sheet-modal-backdrop){display:none !important;}
+  .sheet-modal-backdrop{position:static !important;inset:auto;background:none !important;padding:0 !important;overflow:visible !important;z-index:auto;}
+  .sheet-modal{max-width:none !important;margin:0 !important;border-radius:0 !important;overflow:visible !important;}
+  .sheet-modal-toolbar{display:none !important;}
 }

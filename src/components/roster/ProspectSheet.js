@@ -65,7 +65,7 @@ export default function ProspectSheet({ prospect }) {
       </div>
 
       <div className="sheet-body">
-        <div>
+        <div className="sheet-col">
           <div className="sheet-block">
             <div className="sheet-block-head">Measurements</div>
             <table className="sheet-table">
@@ -127,7 +127,7 @@ export default function ProspectSheet({ prospect }) {
           </div>
         </div>
 
-        <div>
+        <div className="sheet-col">
           <div className="sheet-block">
             <div className="sheet-block-head">Evaluation</div>
             <div className="sheet-eval-row">
