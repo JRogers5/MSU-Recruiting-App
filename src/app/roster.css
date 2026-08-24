@@ -134,7 +134,7 @@
 .card-stack.drag-over{background:var(--panel-raised);border-radius:8px;}
 .player-card:hover{border-color:var(--text-faint);}
 .pc-row{display:flex;gap:12px;}
-.pc-photo{flex:0 0 78px;align-self:stretch;}
+.pc-photo{flex:0 0 108px;align-self:stretch;}
 .avatar{
   width:36px;height:36px;border-radius:50%;background:var(--panel-raised);border:1px solid var(--border);
   display:flex;align-items:center;justify-content:center;font-family:'Oswald',sans-serif;font-size:13px;font-weight:600;
