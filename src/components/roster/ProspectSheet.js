@@ -98,7 +98,7 @@ export default function ProspectSheet({ prospect }) {
             </div>
           </div>
 
-          <div className="sheet-block">
+          <div className="sheet-block sheet-block-grow">
             <div className="sheet-block-head">Contact Information</div>
             <div className="sheet-kv-box">
               <KvRow label="Player cell" value={prospect.player_cell} />
@@ -119,13 +119,13 @@ export default function ProspectSheet({ prospect }) {
               <div className="k">SEC comp</div>
               <div className="v">{prospect.sec_comp || ''}</div>
             </div>
-            <div className="sheet-eval-row" style={{ minHeight: '160px' }}>
+            <div className="sheet-eval-row" style={{ minHeight: '220px' }}>
               <div className="k">Current game breakdown</div>
               <div className="v">{prospect.game_breakdown || ''}</div>
             </div>
           </div>
 
-          <div className="sheet-block">
+          <div className="sheet-block sheet-block-grow">
             <div className="sheet-block-head">Recruiting Information</div>
             <div className="sheet-kv-box">
               <KvRow label="High school coach" value={prospect.hs_coach} />

@@ -25,10 +25,12 @@
 .sheet-line .sep{color:var(--border);font-weight:400;}
 .sheet-line.sub{color:#3a2f2f;font-size:13px;}
 
-.sheet-body{display:flex;gap:18px;align-items:flex-start;}
-.sheet-col{flex:1;min-width:0;}
+.sheet-body{display:flex;gap:18px;align-items:stretch;}
+.sheet-col{flex:1;min-width:0;display:flex;flex-direction:column;}
 .sheet-col:last-child{flex:1.4;}
 .sheet-block{margin-bottom:16px;}
+.sheet-block-grow{flex:1;display:flex;flex-direction:column;}
+.sheet-block-grow .sheet-kv-box{flex:1;}
 .sheet-block-head{
   background:var(--maroon);color:#fff;font-family:'Oswald',sans-serif;font-weight:600;text-transform:uppercase;
   font-size:13px;letter-spacing:.06em;padding:7px 12px;
