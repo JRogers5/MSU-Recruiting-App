@@ -11,6 +11,15 @@ function classLabel(board) {
   return ''
 }
 
+function KvRow({ label, value }) {
+  return (
+    <div className="sheet-kv-row">
+      <span className="k">{label}</span>
+      <span className="v">{value || ''}</span>
+    </div>
+  )
+}
+
 export default function ProspectSheet({ prospect }) {
   return (
     <div className="sheet-page prospect-sheet-print">
@@ -68,30 +77,13 @@ export default function ProspectSheet({ prospect }) {
         <div className="sheet-col">
           <div className="sheet-block">
             <div className="sheet-block-head">Measurements</div>
-            <table className="sheet-table">
-              <tbody>
-                <tr>
-                  <td className="k">Height</td>
-                  <td>{prospect.height || ''}</td>
-                </tr>
-                <tr>
-                  <td className="k">Weight</td>
-                  <td>{prospect.weight ? `${prospect.weight} lbs` : ''}</td>
-                </tr>
-                <tr>
-                  <td className="k">Wingspan</td>
-                  <td>{prospect.wingspan || ''}</td>
-                </tr>
-                <tr>
-                  <td className="k">Standing reach</td>
-                  <td>{prospect.standing_reach || ''}</td>
-                </tr>
-                <tr>
-                  <td className="k">Dominant hand</td>
-                  <td>{prospect.dominant_hand || ''}</td>
-                </tr>
-              </tbody>
-            </table>
+            <div className="sheet-kv-box">
+              <KvRow label="Height" value={prospect.height} />
+              <KvRow label="Weight" value={prospect.weight ? `${prospect.weight} lbs` : ''} />
+              <KvRow label="Wingspan" value={prospect.wingspan} />
+              <KvRow label="Standing reach" value={prospect.standing_reach} />
+              <KvRow label="Dominant hand" value={prospect.dominant_hand} />
+            </div>
           </div>
 
           <div className="sheet-block">
@@ -108,22 +100,11 @@ export default function ProspectSheet({ prospect }) {
 
           <div className="sheet-block">
             <div className="sheet-block-head">Contact Information</div>
-            <table className="sheet-table">
-              <tbody>
-                <tr>
-                  <td className="k">Player cell</td>
-                  <td>{prospect.player_cell || ''}</td>
-                </tr>
-                <tr>
-                  <td className="k">X</td>
-                  <td>{prospect.twitter_handle || ''}</td>
-                </tr>
-                <tr>
-                  <td className="k">Instagram</td>
-                  <td>{prospect.instagram_handle || ''}</td>
-                </tr>
-              </tbody>
-            </table>
+            <div className="sheet-kv-box">
+              <KvRow label="Player cell" value={prospect.player_cell} />
+              <KvRow label="X" value={prospect.twitter_handle} />
+              <KvRow label="Instagram" value={prospect.instagram_handle} />
+            </div>
           </div>
         </div>
 
@@ -146,34 +127,14 @@ export default function ProspectSheet({ prospect }) {
 
           <div className="sheet-block">
             <div className="sheet-block-head">Recruiting Information</div>
-            <table className="sheet-table">
-              <tbody>
-                <tr>
-                  <td className="k">High school coach</td>
-                  <td>{prospect.hs_coach || ''}</td>
-                </tr>
-                <tr>
-                  <td className="k">AAU coach</td>
-                  <td>{prospect.aau_coach || ''}</td>
-                </tr>
-                <tr>
-                  <td className="k">Agent / Representative</td>
-                  <td>{prospect.agent || ''}</td>
-                </tr>
-                <tr>
-                  <td className="k">Offers</td>
-                  <td>{prospect.offers || ''}</td>
-                </tr>
-                <tr>
-                  <td className="k">OV date</td>
-                  <td>{prospect.ov_date || ''}</td>
-                </tr>
-                <tr>
-                  <td className="k">Main competition</td>
-                  <td>{prospect.main_competition || ''}</td>
-                </tr>
-              </tbody>
-            </table>
+            <div className="sheet-kv-box">
+              <KvRow label="High school coach" value={prospect.hs_coach} />
+              <KvRow label="AAU coach" value={prospect.aau_coach} />
+              <KvRow label="Agent / Representative" value={prospect.agent} />
+              <KvRow label="Offers" value={prospect.offers} />
+              <KvRow label="OV date" value={prospect.ov_date} />
+              <KvRow label="Main competition" value={prospect.main_competition} />
+            </div>
           </div>
         </div>
       </div>
