@@ -45,15 +45,17 @@ export default async function DashboardPage() {
     )
   }
 
-  const [{ data: players }, { data: settings }, { data: contacts }] = await Promise.all([
-    supabase
-      .from('players')
-      .select('*')
-      .order('position')
-      .order('sort_order'),
-    supabase.from('settings').select('*').eq('id', true).single(),
-    supabase.from('contacts').select('*'),
-  ])
+  const [{ data: players }, { data: settings }, { data: contacts }, { data: prospects }] =
+    await Promise.all([
+      supabase
+        .from('players')
+        .select('*')
+        .order('position')
+        .order('sort_order'),
+      supabase.from('settings').select('*').eq('id', true).single(),
+      supabase.from('contacts').select('*'),
+      supabase.from('prospects').select('*').order('position_group').order('sort_order'),
+    ])
 
   return (
     <RosterApp
@@ -62,6 +64,7 @@ export default async function DashboardPage() {
         settings || { team_name: 'Mississippi State Basketball', roster_limit: 15 }
       }
       initialContacts={contacts || []}
+      initialProspects={prospects || []}
       role={staffRow.role}
       staffName={staffRow.name}
       logoutAction={logout}

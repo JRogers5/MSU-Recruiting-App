@@ -2,7 +2,7 @@
 
 import { useMemo, useRef, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { POSITIONS, PAGE_LABELS, RECRUITING_POSITION_GROUPS } from './constants'
+import { POSITIONS, PAGE_LABELS, RECRUITING_POSITION_GROUPS, RECRUITING_BOARDS } from './constants'
 import {
   insertPlayer,
   updatePlayer,
@@ -16,6 +16,11 @@ import {
   updateContact,
   deleteContactRow,
   bulkInsertContacts,
+  insertProspect,
+  updateProspect,
+  deleteProspectRow,
+  reorderProspectColumn,
+  uploadProspectPhoto,
 } from './api'
 import NavMenu from './NavMenu'
 import Header from './Header'
@@ -35,6 +40,9 @@ import RecruitingBoard from './RecruitingBoard'
 import AddContactChoiceModal from './AddContactChoiceModal'
 import ContactModal from './ContactModal'
 import ImportContactsModal from './ImportContactsModal'
+import ProspectModal from './ProspectModal'
+
+const RECRUITING_BOARD_KEYS = Object.keys(RECRUITING_BOARDS)
 
 const SAMPLE_PLAYERS = [
   { position: 'PG', name: 'Jalen Carter', class: 'Jr', elig_remaining: 2, height: '6\'1"', weight: 180, hometown: 'Jackson, MS', prior_school: '', exempt: false },
@@ -49,6 +57,7 @@ export default function RosterApp({
   initialPlayers,
   initialSettings,
   initialContacts,
+  initialProspects,
   role,
   staffName,
   logoutAction,
@@ -59,6 +68,11 @@ export default function RosterApp({
   const [players, setPlayers] = useState(initialPlayers)
   const [settings, setSettings] = useState(initialSettings)
   const [contacts, setContacts] = useState(initialContacts)
+  const [prospects, setProspects] = useState(initialProspects)
+  const [prospectModalOpen, setProspectModalOpen] = useState(false)
+  const [editingProspectId, setEditingProspectId] = useState(null)
+  const [prospectBoard, setProspectBoard] = useState(null)
+  const [presetPositionGroup, setPresetPositionGroup] = useState(null)
   const [addChoiceOpen, setAddChoiceOpen] = useState(false)
   const [contactModalOpen, setContactModalOpen] = useState(false)
   const [editingContactId, setEditingContactId] = useState(null)
@@ -356,9 +370,110 @@ export default function RosterApp({
     }
   }
 
+  function openProspectModal(board, id, posGroup) {
+    setProspectBoard(board)
+    setEditingProspectId(id || null)
+    setPresetPositionGroup(posGroup || null)
+    setProspectModalOpen(true)
+  }
+
+  function closeProspectModal() {
+    setProspectModalOpen(false)
+    setEditingProspectId(null)
+    setPresetPositionGroup(null)
+    setProspectBoard(null)
+  }
+
+  async function saveProspect({ id, isNew, values, photoResult }) {
+    try {
+      const prospectId = id || crypto.randomUUID()
+      let photo_url
+      if (photoResult?.blob) {
+        photo_url = await uploadProspectPhoto(supabase, prospectId, photoResult.blob)
+      } else if (photoResult?.removed) {
+        photo_url = null
+      }
+
+      if (isNew) {
+        const order = prospects.filter(
+          (p) => p.board === prospectBoard && p.position_group === values.position_group
+        ).length
+        const inserted = await insertProspect(supabase, {
+          id: prospectId,
+          board: prospectBoard,
+          ...values,
+          sort_order: order,
+          photo_url: photo_url ?? null,
+        })
+        setProspects((prev) => [...prev, inserted])
+        showToast('Prospect added')
+      } else {
+        const patch = { ...values }
+        if (photo_url !== undefined) patch.photo_url = photo_url
+        const updated = await updateProspect(supabase, id, patch)
+        setProspects((prev) => prev.map((p) => (p.id === id ? updated : p)))
+        showToast('Prospect updated')
+      }
+      setSaveFailed(false)
+      closeProspectModal()
+    } catch (err) {
+      console.error(err)
+      setSaveFailed(true)
+      showToast('Could not save — check your connection and try again')
+    }
+  }
+
+  async function deleteProspect(prospect) {
+    if (!confirm(`Remove ${prospect.name} from the board?`)) return
+    try {
+      await deleteProspectRow(supabase, prospect.id)
+      setProspects((prev) => prev.filter((p) => p.id !== prospect.id))
+      showToast('Prospect removed')
+      setSaveFailed(false)
+    } catch (err) {
+      console.error(err)
+      setSaveFailed(true)
+      showToast('Could not remove prospect')
+    }
+  }
+
+  function reorderProspectWithinColumn(board, pos, draggedId, targetId, before) {
+    const colIds = prospects
+      .filter((p) => p.board === board && p.position_group === pos)
+      .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0) || a.name.localeCompare(b.name))
+      .map((p) => p.id)
+      .filter((id) => id !== draggedId)
+
+    let insertAt = colIds.length
+    if (targetId) {
+      const idx = colIds.indexOf(targetId)
+      insertAt = before ? idx : idx + 1
+    }
+    colIds.splice(insertAt, 0, draggedId)
+    const updates = colIds.map((id, i) => ({ id, sort_order: i }))
+
+    setProspects((prev) =>
+      prev.map((p) => {
+        const u = updates.find((u) => u.id === p.id)
+        return u ? { ...p, sort_order: u.sort_order } : p
+      })
+    )
+
+    reorderProspectColumn(supabase, updates)
+      .then(() => setSaveFailed(false))
+      .catch((err) => {
+        console.error(err)
+        setSaveFailed(true)
+        showToast('Could not save new order')
+      })
+  }
+
   const editingPlayer = editingId ? players.find((p) => p.id === editingId) : null
   const editingContact = editingContactId
     ? contacts.find((c) => c.id === editingContactId)
+    : null
+  const editingProspect = editingProspectId
+    ? prospects.find((p) => p.id === editingProspectId)
     : null
 
   return (
@@ -430,10 +545,18 @@ export default function RosterApp({
               Roster data is shared with all signed-in staff. Only admins can make changes.
             </p>
           </>
-        ) : page === 'rec2027' ? (
+        ) : RECRUITING_BOARD_KEYS.includes(page) ? (
           <RecruitingBoard
-            title="2027 Recruiting Board"
+            title={RECRUITING_BOARDS[page]}
             positions={RECRUITING_POSITION_GROUPS}
+            prospects={prospects.filter((p) => p.board === page)}
+            isAdmin={isAdmin}
+            onAdd={(id, pos) => openProspectModal(page, id, pos)}
+            onEdit={(id) => openProspectModal(page, id, null)}
+            onDelete={deleteProspect}
+            onReorder={(pos, draggedId, targetId, before) =>
+              reorderProspectWithinColumn(page, pos, draggedId, targetId, before)
+            }
           />
         ) : page === 'contacts' ? (
           <ContactsPage
@@ -467,6 +590,16 @@ export default function RosterApp({
           onExport={exportRoster}
           onImport={importRosterFile}
           onClear={clearRoster}
+        />
+      )}
+
+      {prospectModalOpen && (
+        <ProspectModal
+          prospect={editingProspect}
+          presetPositionGroup={presetPositionGroup}
+          onSave={saveProspect}
+          onClose={closeProspectModal}
+          onToast={showToast}
         />
       )}
 

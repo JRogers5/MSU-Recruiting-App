@@ -85,3 +85,9 @@ export const PAGE_LABELS = {
   rosterBuilder: 'Roster Builder',
   contacts: 'Contacts',
 }
+
+export const RECRUITING_BOARDS = {
+  rec2027: '2027 Recruiting Board',
+  rec2028: '2028 Recruiting Board',
+  transfer: 'Transfer Recruiting Board',
+}
