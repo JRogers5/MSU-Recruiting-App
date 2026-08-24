@@ -21,10 +21,12 @@ export default function ProspectModal({ prospect, presetPositionGroup, onSave, o
       name,
       position_group: fd.get('position_group'),
       high_school: fd.get('high_school')?.trim() || '',
+      aau_team: fd.get('aau_team')?.trim() || '',
       hometown: fd.get('hometown')?.trim() || '',
       height: fd.get('height') || '',
       weight: fd.get('weight') ? Number(fd.get('weight')) : null,
-      notes: fd.get('notes')?.trim() || '',
+      synergy_link: fd.get('synergy_link')?.trim() || '',
+      highlight_link: fd.get('highlight_link')?.trim() || '',
     }
     setSaving(true)
     const photoResult = await photoRef.current.getResult()
@@ -70,6 +72,11 @@ export default function ProspectModal({ prospect, presetPositionGroup, onSave, o
             </div>
 
             <div className="field">
+              <label>AAU team</label>
+              <input name="aau_team" defaultValue={prospect?.aau_team || ''} />
+            </div>
+
+            <div className="field">
               <label>Height</label>
               <input name="height" placeholder="6'5&quot;" defaultValue={prospect?.height || ''} />
             </div>
@@ -85,8 +92,27 @@ export default function ProspectModal({ prospect, presetPositionGroup, onSave, o
             </div>
 
             <div className="field full">
-              <label>Notes</label>
-              <textarea name="notes" defaultValue={prospect?.notes || ''} />
+              <label>Film links</label>
+            </div>
+
+            <div className="field">
+              <label>Synergy link</label>
+              <input
+                type="url"
+                name="synergy_link"
+                placeholder="https://…"
+                defaultValue={prospect?.synergy_link || ''}
+              />
+            </div>
+
+            <div className="field">
+              <label>Highlight link</label>
+              <input
+                type="url"
+                name="highlight_link"
+                placeholder="https://…"
+                defaultValue={prospect?.highlight_link || ''}
+              />
             </div>
           </div>
 
