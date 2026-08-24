@@ -3,7 +3,7 @@
   --border:#d8d0d0;
   max-width:850px;
   margin:0 auto;
-  padding:28px;
+  padding:20px;
   background:#fff;
   color:#1a1414;
   font-family:'Inter',system-ui,sans-serif;
@@ -16,11 +16,11 @@
 }
 .sheet-toolbar button.ghost{background:#fff;color:var(--maroon);}
 
-.sheet-header{display:flex;gap:24px;align-items:flex-start;border-bottom:2px solid var(--maroon);padding-bottom:14px;margin-bottom:16px;}
-.sheet-photo{width:150px;height:150px;flex-shrink:0;border:1px solid var(--border);border-radius:4px;overflow:hidden;background:#eee;display:flex;align-items:center;justify-content:center;}
+.sheet-header{display:flex;gap:20px;align-items:flex-start;border-bottom:2px solid var(--maroon);padding-bottom:10px;margin-bottom:12px;}
+.sheet-photo{width:120px;height:120px;flex-shrink:0;border:1px solid var(--border);border-radius:4px;overflow:hidden;background:#eee;display:flex;align-items:center;justify-content:center;}
 .sheet-photo img{width:100%;height:100%;object-fit:cover;}
 .sheet-photo .initials{font-family:'Oswald',sans-serif;font-size:40px;color:#999;}
-.sheet-name{font-family:'Oswald',sans-serif;font-weight:700;text-transform:uppercase;font-size:44px;letter-spacing:.01em;margin:0 0 8px;color:#1a1414;}
+.sheet-name{font-family:'Oswald',sans-serif;font-weight:700;text-transform:uppercase;font-size:34px;letter-spacing:.01em;margin:0 0 6px;color:#1a1414;}
 .sheet-line{display:flex;gap:10px;align-items:center;font-family:'Oswald',sans-serif;font-weight:600;font-size:16px;text-transform:uppercase;color:var(--maroon);margin-bottom:6px;flex-wrap:wrap;}
 .sheet-line .sep{color:var(--border);font-weight:400;}
 .sheet-line.sub{color:#3a2f2f;font-size:13px;}
@@ -28,7 +28,7 @@
 .sheet-body{display:flex;gap:18px;align-items:stretch;}
 .sheet-col{flex:1;min-width:0;display:flex;flex-direction:column;}
 .sheet-col:last-child{flex:1.4;}
-.sheet-block{margin-bottom:16px;}
+.sheet-block{margin-bottom:10px;}
 .sheet-block-grow{flex:1;display:flex;flex-direction:column;}
 .sheet-block-grow .sheet-kv-box{flex:1;}
 .sheet-block-head{
@@ -36,17 +36,17 @@
   font-size:13px;letter-spacing:.06em;padding:7px 12px;
 }
 .sheet-kv-box{border:1px solid var(--border);border-top:none;}
-.sheet-kv-row{display:flex;gap:10px;border-bottom:1px solid var(--border);padding:7px 10px;font-size:12.5px;}
+.sheet-kv-row{display:flex;gap:10px;border-bottom:1px solid var(--border);padding:5px 10px;font-size:12px;}
 .sheet-kv-row:last-child{border-bottom:none;}
 .sheet-kv-row .k{flex:0 0 42%;color:#6b5f5f;font-weight:600;}
 .sheet-kv-row .v{flex:1;min-width:0;}
 
-.sheet-eval-row{border:1px solid var(--border);border-top:none;padding:8px 12px;}
+.sheet-eval-row{border:1px solid var(--border);border-top:none;padding:6px 12px;}
 .sheet-eval-row .k{font-family:'Oswald',sans-serif;font-weight:600;font-size:11.5px;text-transform:uppercase;color:var(--maroon);margin-bottom:2px;}
 .sheet-eval-row .v{font-size:12.5px;white-space:pre-wrap;min-height:14px;}
 
-.sheet-shot-chart{border:1px solid var(--border);border-top:none;padding:10px;min-height:140px;display:flex;align-items:center;justify-content:center;}
-.sheet-shot-chart img{max-width:100%;max-height:220px;object-fit:contain;}
+.sheet-shot-chart{border:1px solid var(--border);border-top:none;padding:8px;min-height:90px;display:flex;align-items:center;justify-content:center;}
+.sheet-shot-chart img{max-width:100%;max-height:170px;object-fit:contain;}
 .sheet-shot-chart .empty{font-size:12px;color:#a99;font-style:italic;}
 
 .sheet-stat-row{display:flex;border:1px solid var(--border);border-top:none;}
@@ -56,11 +56,11 @@
   font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.05em;
   background:#f7f2f2;padding:8px;color:#6b5f5f;border-bottom:1px solid var(--border);
 }
-.sheet-stat-cell .stat-value{text-align:center;padding:10px;font-family:'IBM Plex Mono',monospace;font-size:14px;}
+.sheet-stat-cell .stat-value{text-align:center;padding:7px;font-family:'IBM Plex Mono',monospace;font-size:13px;}
 
-.sheet-footer{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:26px;padding-top:14px;border-top:1px solid var(--border);}
-.sheet-footer img.state-logo{height:34px;}
-.sheet-footer img.bulldog-logo{height:52px;}
+.sheet-footer{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:12px;padding-top:8px;border-top:1px solid var(--border);}
+.sheet-footer img.state-logo{height:26px;}
+.sheet-footer img.bulldog-logo{height:40px;}
 .sheet-footer .fname{font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6b5f5f;}
 .sheet-footer .fline{flex:1;height:1px;background:var(--border);max-width:180px;}
 

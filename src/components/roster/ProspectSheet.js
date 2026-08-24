@@ -119,7 +119,7 @@ export default function ProspectSheet({ prospect }) {
               <div className="k">SEC comp</div>
               <div className="v">{prospect.sec_comp || ''}</div>
             </div>
-            <div className="sheet-eval-row" style={{ minHeight: '220px' }}>
+            <div className="sheet-eval-row" style={{ minHeight: '140px' }}>
               <div className="k">Current game breakdown</div>
               <div className="v">{prospect.game_breakdown || ''}</div>
             </div>
@@ -139,7 +139,7 @@ export default function ProspectSheet({ prospect }) {
         </div>
       </div>
 
-      <div className="sheet-block" style={{ marginTop: '20px' }}>
+      <div className="sheet-block" style={{ marginTop: '10px' }}>
         <div className="sheet-block-head">2026 AAU Statline</div>
         <div className="sheet-stat-row">
           {[
