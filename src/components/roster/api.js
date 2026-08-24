@@ -1,0 +1,63 @@
+export async function insertPlayer(supabase, player) {
+  const { data, error } = await supabase.from('players').insert(player).select().single()
+  if (error) throw error
+  return data
+}
+
+export async function updatePlayer(supabase, id, patch) {
+  const { data, error } = await supabase
+    .from('players')
+    .update(patch)
+    .eq('id', id)
+    .select()
+    .single()
+  if (error) throw error
+  return data
+}
+
+export async function deletePlayerRow(supabase, id) {
+  const { error } = await supabase.from('players').delete().eq('id', id)
+  if (error) throw error
+}
+
+export async function deleteAllPlayers(supabase) {
+  const { error } = await supabase.from('players').delete().not('id', 'is', null)
+  if (error) throw error
+}
+
+export async function bulkInsertPlayers(supabase, players) {
+  const { data, error } = await supabase.from('players').insert(players).select()
+  if (error) throw error
+  return data
+}
+
+export async function reorderColumn(supabase, updates) {
+  await Promise.all(
+    updates.map(({ id, sort_order }) =>
+      supabase.from('players').update({ sort_order }).eq('id', id)
+    )
+  )
+}
+
+export async function updateSettingsRow(supabase, patch) {
+  const { data, error } = await supabase
+    .from('settings')
+    .update(patch)
+    .eq('id', true)
+    .select()
+    .single()
+  if (error) throw error
+  return data
+}
+
+export async function uploadPlayerPhoto(supabase, playerId, blob) {
+  const path = `${playerId}.jpg`
+  const { error } = await supabase.storage
+    .from('player-photos')
+    .upload(path, blob, { upsert: true, contentType: 'image/jpeg' })
+  if (error) throw error
+  const {
+    data: { publicUrl },
+  } = supabase.storage.from('player-photos').getPublicUrl(path)
+  return `${publicUrl}?v=${Date.now()}`
+}
