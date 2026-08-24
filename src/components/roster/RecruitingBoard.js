@@ -9,6 +9,7 @@ export default function RecruitingBoard({
   prospects,
   isAdmin,
   onAdd,
+  onView,
   onEdit,
   onDelete,
   onReorder,
@@ -108,6 +109,7 @@ export default function RecruitingBoard({
                     }}
                     onDragOver={(e) => e.preventDefault()}
                     onDrop={(e) => handleCardDrop(e, pos, prospect)}
+                    onView={onView}
                     onEdit={onEdit}
                     onDelete={onDelete}
                   />

@@ -2,7 +2,7 @@
 
 import Avatar from './Avatar'
 
-export default function PlayerCard({ player, isAdmin, isDragging, onDragStart, onDragEnd, onDragOver, onDrop, onEdit, onDelete }) {
+export default function PlayerCard({ player, isAdmin, isDragging, onDragStart, onDragEnd, onDragOver, onDrop, onView, onEdit, onDelete }) {
   return (
     <div
       className={`player-card${isDragging ? ' dragging' : ''}`}
@@ -11,13 +11,29 @@ export default function PlayerCard({ player, isAdmin, isDragging, onDragStart, o
       onDragEnd={onDragEnd}
       onDragOver={onDragOver}
       onDrop={onDrop}
+      onClick={() => onView(player)}
+      style={{ cursor: 'pointer' }}
     >
       {isAdmin && (
         <div className="pc-actions">
-          <button className="icon-btn" onClick={() => onEdit(player.id)} aria-label="Edit">
+          <button
+            className="icon-btn"
+            onClick={(e) => {
+              e.stopPropagation()
+              onEdit(player.id)
+            }}
+            aria-label="Edit"
+          >
             ✎
           </button>
-          <button className="icon-btn" onClick={() => onDelete(player)} aria-label="Remove">
+          <button
+            className="icon-btn"
+            onClick={(e) => {
+              e.stopPropagation()
+              onDelete(player)
+            }}
+            aria-label="Remove"
+          >
             ✕
           </button>
         </div>

@@ -10,6 +10,7 @@ export default function ProspectCard({
   onDragEnd,
   onDragOver,
   onDrop,
+  onView,
   onEdit,
   onDelete,
 }) {
@@ -21,13 +22,29 @@ export default function ProspectCard({
       onDragEnd={onDragEnd}
       onDragOver={onDragOver}
       onDrop={onDrop}
+      onClick={() => onView(prospect)}
+      style={{ cursor: 'pointer' }}
     >
       {isAdmin && (
         <div className="pc-actions">
-          <button className="icon-btn" onClick={() => onEdit(prospect.id)} aria-label="Edit">
+          <button
+            className="icon-btn"
+            onClick={(e) => {
+              e.stopPropagation()
+              onEdit(prospect.id)
+            }}
+            aria-label="Edit"
+          >
             ✎
           </button>
-          <button className="icon-btn" onClick={() => onDelete(prospect)} aria-label="Remove">
+          <button
+            className="icon-btn"
+            onClick={(e) => {
+              e.stopPropagation()
+              onDelete(prospect)
+            }}
+            aria-label="Remove"
+          >
             ✕
           </button>
         </div>

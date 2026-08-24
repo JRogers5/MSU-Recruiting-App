@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { POSITIONS } from './constants'
 import PlayerCard from './PlayerCard'
 
-export default function Board({ players, isAdmin, onEdit, onDelete, onReorder }) {
+export default function Board({ players, isAdmin, onView, onEdit, onDelete, onReorder }) {
   const [draggedId, setDraggedId] = useState(null)
   const [dragOverPos, setDragOverPos] = useState(null)
 
@@ -76,6 +76,7 @@ export default function Board({ players, isAdmin, onEdit, onDelete, onReorder })
                   }}
                   onDragOver={(e) => e.preventDefault()}
                   onDrop={(e) => handleCardDrop(e, pos, player)}
+                  onView={onView}
                   onEdit={onEdit}
                   onDelete={onDelete}
                 />

@@ -41,6 +41,8 @@ import AddContactChoiceModal from './AddContactChoiceModal'
 import ContactModal from './ContactModal'
 import ImportContactsModal from './ImportContactsModal'
 import ProspectModal from './ProspectModal'
+import PlayerDetailModal from './PlayerDetailModal'
+import ProspectDetailModal from './ProspectDetailModal'
 
 const RECRUITING_BOARD_KEYS = Object.keys(RECRUITING_BOARDS)
 
@@ -85,6 +87,8 @@ export default function RosterApp({
   const [modalOpen, setModalOpen] = useState(false)
   const [editingId, setEditingId] = useState(null)
   const [presetPosition, setPresetPosition] = useState(null)
+  const [viewingPlayerId, setViewingPlayerId] = useState(null)
+  const [viewingProspectId, setViewingProspectId] = useState(null)
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [saveFailed, setSaveFailed] = useState(false)
   const [toastMsg, setToastMsg] = useState('')
@@ -475,6 +479,10 @@ export default function RosterApp({
   const editingProspect = editingProspectId
     ? prospects.find((p) => p.id === editingProspectId)
     : null
+  const viewingPlayer = viewingPlayerId ? players.find((p) => p.id === viewingPlayerId) : null
+  const viewingProspect = viewingProspectId
+    ? prospects.find((p) => p.id === viewingProspectId)
+    : null
 
   return (
     <div className="roster-root">
@@ -516,6 +524,7 @@ export default function RosterApp({
               <Board
                 players={players}
                 isAdmin={isAdmin}
+                onView={(player) => setViewingPlayerId(player.id)}
                 onEdit={openModal}
                 onDelete={deletePlayer}
                 onReorder={reorderWithinColumn}
@@ -552,6 +561,7 @@ export default function RosterApp({
             prospects={prospects.filter((p) => p.board === page)}
             isAdmin={isAdmin}
             onAdd={(id, pos) => openProspectModal(page, id, pos)}
+            onView={(prospect) => setViewingProspectId(prospect.id)}
             onEdit={(id) => openProspectModal(page, id, null)}
             onDelete={deleteProspect}
             onReorder={(pos, draggedId, targetId, before) =>
@@ -600,6 +610,30 @@ export default function RosterApp({
           onSave={saveProspect}
           onClose={closeProspectModal}
           onToast={showToast}
+        />
+      )}
+
+      {viewingPlayer && (
+        <PlayerDetailModal
+          player={viewingPlayer}
+          isAdmin={isAdmin}
+          onEdit={(id) => {
+            setViewingPlayerId(null)
+            openModal(id)
+          }}
+          onClose={() => setViewingPlayerId(null)}
+        />
+      )}
+
+      {viewingProspect && (
+        <ProspectDetailModal
+          prospect={viewingProspect}
+          isAdmin={isAdmin}
+          onEdit={(id) => {
+            setViewingProspectId(null)
+            openProspectModal(viewingProspect.board, id, null)
+          }}
+          onClose={() => setViewingProspectId(null)}
         />
       )}
 
