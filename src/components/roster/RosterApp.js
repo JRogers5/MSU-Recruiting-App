@@ -657,7 +657,15 @@ export default function RosterApp({
       )}
 
       {sheetProspect && (
-        <ProspectSheetModal prospect={sheetProspect} onClose={() => setSheetProspectId(null)} />
+        <ProspectSheetModal
+          prospect={sheetProspect}
+          isAdmin={isAdmin}
+          onEdit={(id) => {
+            setSheetProspectId(null)
+            openProspectModal(sheetProspect.board, id, null)
+          }}
+          onClose={() => setSheetProspectId(null)}
+        />
       )}
 
       {addChoiceOpen && (
