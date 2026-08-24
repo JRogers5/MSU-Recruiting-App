@@ -85,6 +85,14 @@ export default function ContactsPage({ contacts, isAdmin, onAdd, onEdit, onDelet
                         >
                           📞
                         </a>
+                        <a
+                          className="icon-btn"
+                          href={`sms:${c.phone}`}
+                          aria-label={`Text ${c.name}`}
+                          title={`Text ${c.name}`}
+                        >
+                          💬
+                        </a>
                       </span>
                     ) : (
                       '—'
